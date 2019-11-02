@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Items : la liste
+{% endblock %}
+
+{% block content %}
+    <p>Items :
+        {{ pagination.getTotalItemCount }}</p>
+    <form>
+        <input type="text" class="input" name="q" placeholder="Search" value="{{ app.request.query.get('q') }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <ul>
+        {% for item in pagination %}
+            <li>
+                <a href="{{ path('item_show',{slug:item.slug}) }}">{{item.name}}</a>
+            </li>
+        {% else %}
+            <li>Aucun résultat</li>
+        {% endfor %}
+    </ul>
+    <div>
+        <a href="{{path('item_add')}}" class="btn btn-primary">Add item</a>
+    </div>
+    {{ knp_pagination_render(pagination) }}
+{% endblock %}

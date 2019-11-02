@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block content %}
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">Search</label>
+            <input type="text" name="q" class="form-control" placeholder="Search"  value="{{ app.request.query.get('q') }}">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('items_list') }}">{% trans %}item.home{% endtrans %}</a></li>
             {% for element in path %}
             <li class="breadcrumb-item {{ (item.slug==element.slug)?'active':'' }}">
                 {% if (item.slug==element.slug) %}
@@ -27,9 +34,11 @@
     {% endif %}
     <div>
     </div>
-    <div class="list-group">
+    <div class="list-group mb-2">
         {% for item in pagination %}
-                <a class="list-group-item list-group-item-action" href="{{ path('item_show',{slug:item.slug}) }}">{% if item.isBox %} <span class="oi oi-box"></span> {% endif %}{{ item.name }}</a>
+            <a class="list-group-item list-group-item-action"
+               href="{{ path('item_show',{slug:item.slug}) }}">{% if item.isBox %} <span
+                        class="oi oi-box"></span> {% endif %}{{ item.name }}</a>
 
         {% else %}
             <li>{{ 'item.noresults' | trans }}</li>

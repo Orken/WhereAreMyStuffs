@@ -18,7 +18,7 @@ class ItemController extends AbstractController
 {
 
     /**
-     * @Route("/item/", name="items_list")
+     * @Route("/items/", name="items_list")
      */
     public function index(ItemRepository $repository, PaginatorInterface $paginator, Request $request)
     {
@@ -27,7 +27,6 @@ class ItemController extends AbstractController
         $pagination = $paginator->paginate(
                 $queryBuilder,
                 $request->query->getInt('page', 1),
-                10
         );
         return $this->render('item/index.html.twig', [
                 'pagination' => $pagination
@@ -84,19 +83,25 @@ class ItemController extends AbstractController
 
     /**
      * @Route("/item/{slug}", name="item_show")
+     * @Route("/", name="item_list")
      */
-    public function show($slug, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator)
+    public function show($slug = false, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator)
     {
         $repo = $em->getRepository(Item::class);
-        /** @var Item $box */
-        $item = $repo->findOneBy(['slug' => $slug]);
+        /** @var Item $item */
+        if ($slug) {
+            $item = $repo->findOneBy(['slug' => $slug]);
+        } else {
+            $item = $repo->findOneBy(['parent' => null]);
+        }
         if (!$item) {
             throw new $this->createNotFoundException('lol');
         }
         $items = $em->getRepository(Item::class)->children($item, false, 'lvl');
         $pagination = $paginator->paginate(
                 $items,
-                $request->query->getInt('page', 1)
+                $request->query->getInt('page', 1),
+                6
         );
         return $this->render('item/show.html.twig', [
                 'item' => $item,

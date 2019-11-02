@@ -1,0 +1,12 @@
+.title {
+    background-color: lightgrey;
+    margin: 0;
+    padding: 0 10px;
+}
+.title h1 {
+    font-size: 20px;
+}
+.title h1 .oi {
+    font-size: 0.85em;
+    color:white;
+}

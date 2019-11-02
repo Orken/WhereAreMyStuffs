@@ -7,6 +7,22 @@
 {% block content %}
     <h2>{{ item.name }}  </h2>
     <div>
-        <em>{{item.comment}}</em>
+        <em>{{ item.comment }}</em>
     </div>
+    <ul>
+        {% for item in pagination %}
+            <li>
+                <a href="{{ path('item_show',{slug:item.slug}) }}">{{ item.name }}</a>
+                {% if item.isBox %}<span class="oi oi-box"></span>{% endif %}
+            </li>
+        {% else %}
+            <li>{{ 'item.noresults' | trans }}</li>
+        {% endfor %}
+    </ul>
+    {{ knp_pagination_render(pagination) }}
+    <hr>
+    <div class="text-center">
+        <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary">Add item</a>
+    </div>
+
 {% endblock %}

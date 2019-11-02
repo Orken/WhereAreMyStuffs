@@ -141,6 +141,11 @@ class Item
         return $this;
     }
 
+    public function isBox()
+    {
+        return ($this->rgt - $this->lft) > 1;
+    }
+
     public function getRoot()
     {
         return $this->root;

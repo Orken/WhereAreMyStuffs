@@ -25,23 +25,34 @@ class ItemController extends AbstractController
         $q = $request->query->get('q');
         $queryBuilder = $repository->getWithSearchQueryBuilder($q);
         $pagination = $paginator->paginate(
-            $queryBuilder,
-            $request->query->getInt('page', 1),
-            10
+                $queryBuilder,
+                $request->query->getInt('page', 1),
+                10
         );
-
         return $this->render('item/index.html.twig', [
-            'pagination' => $pagination
+                'pagination' => $pagination
         ]);
     }
 
     /**
-     * @Route("/item/new", name="item_add")
+     * @Route("/item/recover", name="items_recover")
+     */
+    public function recover(EntityManagerInterface $em)
+    {
+        $em->getRepository(Item::class)->recover();
+        $em->flush();
+
+        return $this->redirectToRoute('items_list');
+
+    }
+
+    /**
+     * @Route("/item/new/{slug}", name="item_add")
      *
      * @param EntityManagerInterface $em
      * @return Response
      */
-    public function add(EntityManagerInterface $em, Request $request, ItemRepository $repository)
+    public function add(EntityManagerInterface $em, Request $request, ItemRepository $repository, $slug = false)
     {
         $form = $this->createForm(ItemFormType::class);
 
@@ -49,25 +60,32 @@ class ItemController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Item $item */
             $item = $form->getData();
-
-            $parent = $repository->getBySlug('vb-g');
+            if ($slug) {
+                $parent = $repository->getBySlug($slug);
+            } else {
+                $parent = $repository->findOneBy(['parent' => null]);
+            }
             $item->setParent($parent);
             $em->persist($item);
             $em->flush();
 
             $this->addFlash('success', 'Item created');
-            return $this->redirectToRoute('items_list');
+            if ($slug) {
+                return $this->redirectToRoute('item_show', ['slug' => $slug]);
+            } else {
+                return $this->redirectToRoute('items_list');
+            }
 
         }
         return $this->render('item/new.html.twig', [
-            'itemForm' => $form->createView()
+                'itemForm' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/item/{slug}", name="item_show")
      */
-    public function show($slug, EntityManagerInterface $em)
+    public function show($slug, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator)
     {
         $repo = $em->getRepository(Item::class);
         /** @var Item $box */
@@ -75,9 +93,15 @@ class ItemController extends AbstractController
         if (!$item) {
             throw new $this->createNotFoundException('lol');
         }
-
+        $items = $em->getRepository(Item::class)->children($item, false, 'lvl');
+        $pagination = $paginator->paginate(
+                $items,
+                $request->query->getInt('page', 1),
+                5
+        );
         return $this->render('item/show.html.twig', [
-            'item' => $item,
+                'item' => $item,
+                'pagination' => $pagination
         ]);
     }
 }

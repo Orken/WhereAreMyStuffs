@@ -6,21 +6,27 @@
 {% block content %}
     <p>Items :
         {{ pagination.getTotalItemCount }}</p>
-    <form>
-        <input type="text" class="input" name="q" placeholder="Search" value="{{ app.request.query.get('q') }}">
-        <button type="submit" class="btn btn-primary">Search</button>
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">Search</label>
+            <input type="text" name="q" class="form-control" placeholder="Search"  value="{{ app.request.query.get('q') }}">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
     </form>
+    <hr>
     <ul>
         {% for item in pagination %}
             <li>
-                <a href="{{ path('item_show',{slug:item.slug}) }}">{{item.name}}</a>
+                <a href="{{ path('item_show',{slug:item.slug}) }}">{{ item.name }}</a>
+                {% if item.isBox %}<span class="oi oi-box"></span>{% endif %}
             </li>
         {% else %}
-            <li>Aucun résultat</li>
+            <li>{{ 'item.noresults' | trans }}</li>
         {% endfor %}
     </ul>
-    <div>
-        <a href="{{path('item_add')}}" class="btn btn-primary">Add item</a>
+    {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
+    <hr>
+    <div class="text-right">
+        <a href="{{ path('item_add') }}" class="btn btn-primary">Add item</a>
     </div>
-    {{ knp_pagination_render(pagination) }}
 {% endblock %}

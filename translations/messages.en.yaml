@@ -1,3 +1,5 @@
-item.home: Home
-item.noresults: No results
+item:
+  home: Home
+  items: items
+  noresults: No results
 sitename: BoxManager

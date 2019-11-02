@@ -18,7 +18,7 @@
             {% for element in path %}
             <li class="breadcrumb-item {{ (item.slug==element.slug)?'active':'' }}">
                 {% if (item.slug==element.slug) %}
-                    {{ element.name }}
+                    {{ element.name }} ({{ pagination.getTotalItemCount }} {% trans %}item.items{% endtrans %})
                 {% else %}
                     <a href="{{ path("item_show", {slug:element.slug}) }}">{{ element.name }}</a></li>
                 {% endif %}
@@ -45,9 +45,9 @@
         {% endfor %}
     </div>
     {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
-    <hr>
     <div class="text-center">
-        <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary">Add item</a>
+        <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary"><span
+                    class="oi oi-plus"></span> Add item to « {{ item.name }} »</a>
     </div>
 
 {% endblock %}

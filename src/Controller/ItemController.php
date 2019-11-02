@@ -98,7 +98,14 @@ class ItemController extends AbstractController
         if (!$item) {
             throw new $this->createNotFoundException('lol');
         }
-        $items = $em->getRepository(Item::class)->children($item, false, 'lvl');
+        $q = $request->query->get('q');
+
+        $items = $em
+                ->getRepository(Item::class)
+                ->childrenQueryBuilder($item, false, 'lvl')
+                ->andWhere('node.name LIKE :q OR node.comment LIKE :q')
+                ->setParameter('q', '%' . $q . '%')
+        ;
         $pagination = $paginator->paginate(
                 $items,
                 $request->query->getInt('page', 1),

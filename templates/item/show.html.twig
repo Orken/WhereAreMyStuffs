@@ -9,6 +9,7 @@
     <div>
         <em>{{ item.comment }}</em>
     </div>
+    <hr>
     <ul>
         {% for item in pagination %}
             <li>
@@ -19,7 +20,7 @@
             <li>{{ 'item.noresults' | trans }}</li>
         {% endfor %}
     </ul>
-    {{ knp_pagination_render(pagination) }}
+    {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
     <hr>
     <div class="text-center">
         <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary">Add item</a>

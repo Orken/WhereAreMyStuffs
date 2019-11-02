@@ -5,21 +5,36 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{{ item.name }}  </h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('items_list') }}">{% trans %}item.home{% endtrans %}</a></li>
+            {% for element in path %}
+            <li class="breadcrumb-item {{ (item.slug==element.slug)?'active':'' }}">
+                {% if (item.slug==element.slug) %}
+                    {{ element.name }}
+                {% else %}
+                    <a href="{{ path("item_show", {slug:element.slug}) }}">{{ element.name }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+    {% if item.comment %}
+        <div class="card bg-light mb-2">
+            <div class="card-body">
+                {{ item.comment }}
+            </div>
+        </div>
+    {% endif %}
     <div>
-        <em>{{ item.comment }}</em>
     </div>
-    <hr>
-    <ul>
+    <div class="list-group">
         {% for item in pagination %}
-            <li>
-                <a href="{{ path('item_show',{slug:item.slug}) }}">{{ item.name }}</a>
-                {% if item.isBox %}<span class="oi oi-box"></span>{% endif %}
-            </li>
+                <a class="list-group-item list-group-item-action" href="{{ path('item_show',{slug:item.slug}) }}">{% if item.isBox %} <span class="oi oi-box"></span> {% endif %}{{ item.name }}</a>
+
         {% else %}
             <li>{{ 'item.noresults' | trans }}</li>
         {% endfor %}
-    </ul>
+    </div>
     {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
     <hr>
     <div class="text-center">

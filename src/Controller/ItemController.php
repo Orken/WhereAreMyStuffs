@@ -96,12 +96,12 @@ class ItemController extends AbstractController
         $items = $em->getRepository(Item::class)->children($item, false, 'lvl');
         $pagination = $paginator->paginate(
                 $items,
-                $request->query->getInt('page', 1),
-                5
+                $request->query->getInt('page', 1)
         );
         return $this->render('item/show.html.twig', [
                 'item' => $item,
-                'pagination' => $pagination
+                'pagination' => $pagination,
+                'path' => $repo->getPath($item)
         ]);
     }
 }

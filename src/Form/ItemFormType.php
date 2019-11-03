@@ -21,7 +21,8 @@ class ItemFormType extends AbstractType
                 ->add('imageFile', VichImageType::class, [
                         'imagine_pattern' => 'my_thumb',
                         'attr' => [
-                                'accept' => "image/*"
+                                'accept' => "image/*",
+                                'capture' => 'camera'
                         ]
                 ]);
     }

@@ -8,7 +8,8 @@
     <form class="form-inline">
         <div class="form-group mx-sm-3 mb-2">
             <label for="inputPassword2" class="sr-only">Search</label>
-            <input type="text" name="q" class="form-control" placeholder="Search"  value="{{ app.request.query.get('q') }}">
+            <input type="text" name="q" class="form-control" placeholder="Search"
+                   value="{{ app.request.query.get('q') }}">
         </div>
         <button type="submit" class="btn btn-primary mb-2">Search</button>
     </form>
@@ -32,8 +33,12 @@
             </div>
         </div>
     {% endif %}
-    <div>
-    </div>
+    {% if item.imageName %}
+        <div>
+            <img src="{{ vich_uploader_asset(item, 'imageFile')| imagine_filter('thumb64x64') }}" class="img-fluid"
+                 alt="{{ item.name }}"/>
+        </div>
+    {% endif %}
     <div class="list-group mb-2">
         {% for item in pagination %}
             <a class="list-group-item list-group-item-action"

@@ -35,7 +35,7 @@
     {% endif %}
     {% if item.imageName %}
         <div>
-            <img src="{{ vich_uploader_asset(item, 'imageFile')| imagine_filter('thumb64x64') }}" class="img-fluid"
+            <img src="{{ vich_uploader_asset(item, 'imageFile')| imagine_filter('thumb480x480') }}" class="img-fluid"
                  alt="{{ item.name }}"/>
         </div>
     {% endif %}

@@ -23,7 +23,7 @@ class ItemFormType extends AbstractType
                         'imagine_pattern' => 'thumb64x64',
                         'attr' => [
                                 'accept' => "image/*",
-                                'camera' => true
+                                'capture' => 'camera'
 
                         ]
                 ]);

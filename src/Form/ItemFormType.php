@@ -22,7 +22,6 @@ class ItemFormType extends AbstractType
                         'imagine_pattern' => 'my_thumb',
                         'attr' => [
                                 'accept' => "image/*",
-                                'capture' => 'camera'
                         ]
                 ]);
     }

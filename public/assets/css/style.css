@@ -10,3 +10,17 @@
     font-size: 0.85em;
     color:white;
 }
+.text-center a.btn {
+    content: '+';
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+}
+a.btn .oi {
+    font-size: 32px;
+    margin-top: 10px;
+    margin-left: 3px;
+}

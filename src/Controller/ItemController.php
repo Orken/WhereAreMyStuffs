@@ -86,7 +86,7 @@ class ItemController extends AbstractController
      * @Route("/item/{slug}", name="item_show")
      * @Route("/", name="item_list")
      */
-    public function show($slug = false, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator)
+    public function show(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator, $slug = false)
     {
         $repo = $em->getRepository(Item::class);
         /** @var Item $item */

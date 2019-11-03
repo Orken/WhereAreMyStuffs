@@ -10,7 +10,7 @@ liip_imagine:
         cache: ~
         # the name of the "filter set"
         thumb480x480:
-            quality: 75
+            quality: 50
             filters:
                 thumbnail: { size: [480, 480], mode: outbound }
         thumb64x64:

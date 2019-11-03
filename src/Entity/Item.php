@@ -90,12 +90,13 @@ class Item
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $slug;
+
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="item_image", fileNameProperty="imageName", size="imageSize")
      *
-     * @var File
+     * @var File|null
      */
     private $imageFile;
 

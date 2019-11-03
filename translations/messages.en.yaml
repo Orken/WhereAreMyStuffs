@@ -1,4 +1,6 @@
 item:
+  edit: <span class="oi oi-pencil "></span>
+  delete: <span class="oi oi-trash "></span>
   home: Home
   items: items
   noresults: No results

@@ -86,26 +86,18 @@ class ItemController extends AbstractController
      * @Route("/item/{slug}", name="item_show")
      * @Route("/", name="item_list")
      */
-    public function show(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator, $slug = false)
+    public function show(ItemRepository $repo, Request $request, PaginatorInterface $paginator, Item $item = null)
     {
-        $repo = $em->getRepository(Item::class);
-        /** @var Item $item */
-        if ($slug) {
-            $item = $repo->findOneBy(['slug' => $slug]);
-        } else {
+        if (is_null($item)) {
             $item = $repo->findOneBy(['parent' => null]);
-        }
-        if (!$item) {
-            throw new $this->createNotFoundException('lol');
         }
         $q = $request->query->get('q');
 
-        $items = $em
-                ->getRepository(Item::class)
+        $items = $repo
                 ->childrenQueryBuilder($item, false, 'lvl')
                 ->andWhere('node.name LIKE :q OR node.comment LIKE :q')
-                ->setParameter('q', '%' . $q . '%')
-        ;
+                ->setParameter('q', '%' . $q . '%');
+
         $pagination = $paginator->paginate(
                 $items,
                 $request->query->getInt('page', 1),
@@ -115,6 +107,47 @@ class ItemController extends AbstractController
                 'item' => $item,
                 'pagination' => $pagination,
                 'path' => $repo->getPath($item)
+        ]);
+    }
+
+    /**
+     * @Route("/item/delete/{slug}", name="item_delete")
+     */
+    public function delete(Item $item)
+    {
+        if ($item->isBox()) {
+            $this->addFlash('error', 'This is a box');
+            return $this->redirectToRoute('item_show', ['slug' => $item->getSlug()]);
+
+        }
+        return $this->render('item/delete.html.twig', ['item' => $item]);
+    }
+
+    /**
+     * @Route("/item/edit/{slug}", name="item_edit")
+     */
+    public function edit(Item $item, EntityManagerInterface $em, Request $request, ItemRepository $repository, $slug = false)
+    {
+        $form = $this->createForm(ItemFormType::class, $item);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Item $item */
+            $item = $form->getData();
+            $em->persist($item);
+            $em->flush();
+
+            $this->addFlash('success', 'Item created');
+            if ($slug) {
+                return $this->redirectToRoute('item_show', ['slug' => $slug]);
+            } else {
+                return $this->redirectToRoute('items_list');
+            }
+
+        }
+        return $this->render('item/edit.html.twig', [
+                'item' => $item,
+                'itemForm' => $form->createView(),
         ]);
     }
 }

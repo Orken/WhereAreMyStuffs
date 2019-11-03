@@ -19,9 +19,12 @@ class ItemFormType extends AbstractType
                 ->add('comment')
 //                ->add('imageName')
                 ->add('imageFile', VichImageType::class, [
-                        'imagine_pattern' => 'my_thumb',
+                        'required' => false,
+                        'imagine_pattern' => 'thumb64x64',
                         'attr' => [
                                 'accept' => "image/*",
+                                'camera' => true
+
                         ]
                 ]);
     }

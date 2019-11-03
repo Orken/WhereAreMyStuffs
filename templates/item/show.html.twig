@@ -39,16 +39,28 @@
                  alt="{{ item.name }}"/>
         </div>
     {% endif %}
-    <div class="list-group mb-2">
+
+    <table class="table table-striped">
         {% for item in pagination %}
-            <a class="list-group-item list-group-item-action"
-               href="{{ path('item_show',{slug:item.slug}) }}">{% if item.isBox %} <span
-                        class="oi oi-box"></span> {% endif %}{{ item.name }}</a>
+            <tr class="row">
+                <td class="col">
+                    {% if item.isBox %} <span class="oi oi-box"></span> {% endif %}
+                    <a href="{{ path('item_show',{slug:item.slug}) }}">{{ item.name }}</a>
+                </td>
+                <td class="col-2 text-right">
+                    {% if item.isBox==false %}
+                        <a class="text-danger"
+                           href="{{ path('item_delete', {slug:item.slug}) }}">{% trans %}item.delete{% endtrans %}</a>
+                    {% endif %}
+                        <a class="text-danger"
+                           href="{{ path('item_edit', {slug:item.slug}) }}">{% trans %}item.edit{% endtrans %}</a>
+                </td>
+            </tr>
 
         {% else %}
             <li>{{ 'item.noresults' | trans }}</li>
         {% endfor %}
-    </div>
+    </table>
     {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
     <div class="text-center">
         <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary"><span

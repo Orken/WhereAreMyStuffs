@@ -1,0 +1,10 @@
+{
+  "short_name": "WAMS",
+  "name": "Where Are My Stuffs",
+  "icons": [
+  ],
+  "start_url": "/",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "theme_color": "#3367D6"
+}

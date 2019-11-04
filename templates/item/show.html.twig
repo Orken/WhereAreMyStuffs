@@ -26,12 +26,10 @@
             {% endfor %}
         </ol>
     </nav>
+
+
     {% if item.comment %}
-        <div class="card bg-light mb-2">
-            <div class="card-body">
-                {{ item.comment }}
-            </div>
-        </div>
+        <p class="lead"><em>{{ item.comment }}</em></p>
     {% endif %}
     {% if item.imageName %}
         <div>
@@ -39,32 +37,41 @@
                  alt="{{ item.name }}"/>
         </div>
     {% endif %}
-
+    <div class="text-right">
+        <a class=""
+           href="{{ path('item_edit', {slug:item.slug}) }}">{% trans %}item.edittext{% endtrans %}</a>
+        {% if item.isBox==false %}
+            &nbsp; <a class="text-danger"
+                      href="{{ path('item_delete', {slug:item.slug}) }}">{% trans %}item.deletetext{% endtrans %}</a>
+        {% endif %}
+    </div>
     <table class="table table-striped">
-        {% for item in pagination %}
+        {% for _item in pagination %}
             <tr class="row">
                 <td class="col">
-                    {% if item.isBox %} <span class="oi oi-box"></span> {% endif %}
-                    <a href="{{ path('item_show',{slug:item.slug}) }}">{{ item.name }}</a>
+                    {% if _item.isBox %} <span class="oi oi-box"></span> {% endif %}
+                    <a href="{{ path('item_show',{slug:_item.slug}) }}">{{ _item.name }}</a>
                 </td>
-                <td class="col-2 text-right">
-                    {% if item.isBox==false %}
+                <td class="col-3 text-right">
+                    {% if _item.isBox==false %}
                         <a class="text-danger"
-                           href="{{ path('item_delete', {slug:item.slug}) }}">{% trans %}item.delete{% endtrans %}</a>
+                           href="{{ path('item_delete', {slug:_item.slug}) }}">{% trans %}item.delete{% endtrans %}</a> &nbsp;
                     {% endif %}
-                        <a class="text-danger"
-                           href="{{ path('item_edit', {slug:item.slug}) }}">{% trans %}item.edit{% endtrans %}</a>
+                    <a class="text-danger"
+                       href="{{ path('item_edit', {slug:_item.slug}) }}">{% trans %}item.edit{% endtrans %}</a>
                 </td>
             </tr>
 
         {% else %}
-            <li>{{ 'item.noresults' | trans }}</li>
+            {% if app.request.query.get('q') %}
+                <li>{{ 'item.noresults' | trans }}</li>
+            {% endif %}
         {% endfor %}
     </table>
     {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
     <div class="text-center">
         <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary"><span
-                    class="oi oi-plus"></span> Add item to « {{ item.name }} »</a>
+                    class="oi oi-plus"></span></a>
     </div>
 
 {% endblock %}

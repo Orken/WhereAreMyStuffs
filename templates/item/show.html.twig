@@ -5,31 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="inputPassword2" class="sr-only">Search</label>
-            <input type="text" name="q" class="form-control" placeholder="Search"
-                   value="{{ app.request.query.get('q') }}">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Search</button>
-    </form>
-
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            {% for element in path %}
-            <li class="breadcrumb-item {{ (item.slug==element.slug)?'active':'' }}">
-                {% if (item.slug==element.slug) %}
-                    {{ element.name }} ({{ pagination.getTotalItemCount }} {% trans %}item.items{% endtrans %})
-                {% else %}
-                    <a href="{{ path("item_show", {slug:element.slug}) }}">{{ element.name }}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ol>
-    </nav>
-
-
     {% if item.comment %}
-        <p class="lead"><em>{{ item.comment }}</em></p>
+        <div>{{ item.comment }}</div>
     {% endif %}
     {% if item.imageName %}
         <div>
@@ -37,7 +14,7 @@
                  alt="{{ item.name }}"/>
         </div>
     {% endif %}
-    <div class="text-right">
+    <div class="text-right my-2">
         <a class=""
            href="{{ path('item_edit', {slug:item.slug}) }}">{% trans %}item.edittext{% endtrans %}</a>
         {% if item.isBox==false %}
@@ -45,29 +22,36 @@
                       href="{{ path('item_delete', {slug:item.slug}) }}">{% trans %}item.deletetext{% endtrans %}</a>
         {% endif %}
     </div>
-    <table class="table table-striped">
-        {% for _item in pagination %}
-            <tr class="row">
-                <td class="col">
-                    {% if _item.isBox %} <span class="oi oi-box"></span> {% endif %}
-                    <a href="{{ path('item_show',{slug:_item.slug}) }}">{{ _item.name }}</a>
-                </td>
-                <td class="col-3 text-right">
-                    {% if _item.isBox==false %}
-                        <a class="text-danger"
-                           href="{{ path('item_delete', {slug:_item.slug}) }}">{% trans %}item.delete{% endtrans %}</a> &nbsp;
-                    {% endif %}
-                    <a class="text-danger"
-                       href="{{ path('item_edit', {slug:_item.slug}) }}">{% trans %}item.edit{% endtrans %}</a>
-                </td>
-            </tr>
+    {% for _item in pagination %}
+        <div class="card my-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        {% if _item.isBox %} <span class="oi oi-box"></span> &nbsp;{% endif %}
+                        <a href="{{ path('item_show',{slug:_item.slug}) }}">{{ _item.name }}</a>
+                        {% if _item.comment %}
+                            <div class="small">{{ _item.comment }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-right">
+                        {% if _item.isBox==false %}
+                            <a class="text-danger"
+                               href="{{ path('item_delete', {slug:_item.slug}) }}">{% trans %}item.deletetext{% endtrans %}</a> &nbsp;
+                        {% endif %}
+                        <a class=""
+                           href="{{ path('item_edit', {slug:_item.slug}) }}">{% trans %}item.edittext{% endtrans %}</a>
+                    </div>
+                </div>
+            </div>
 
-        {% else %}
-            {% if app.request.query.get('q') %}
-                <li>{{ 'item.noresults' | trans }}</li>
-            {% endif %}
-        {% endfor %}
-    </table>
+        </div>
+    {% else %}
+        {% if app.request.query.get('q') %}
+            <div>{{ 'item.noresults' | trans }}</div>
+        {% endif %}
+    {% endfor %}
     {{ knp_pagination_render(pagination, null, {}, {'align':'center'}) }}
     <div class="text-center">
         <a href="{{ path('item_add',{slug:item.slug}) }}" class="btn btn-primary"><span

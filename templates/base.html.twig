@@ -15,20 +15,43 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<div class="title">
-    <h1><span class="oi oi-box"></span> <a href="{{ path('item_list') }}">{% trans %}sitename{% endtrans %}</a></h1>
-</div>
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand text-info">WAMS</a>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="q" value="{{ app.request.query.get('q') }}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{%  if path is defined %}
 <div class="container">
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+    <nav aria-label="breadcrumb">
+        <div class="">
+            {% for element in path %}
+            <span class="breadcrumb-item {{ (item.slug==element.slug)?'active':'' }}">
+                {% if (item.slug==element.slug) %}
+                    {{ element.name }} ({{ pagination.getTotalItemCount }} {% trans %}item.items{% endtrans %})
+                {% else %}
+                    <a href="{{ path("item_show", {slug:element.slug}) }}">{{ element.name }}</a></span>
+                {% endif %}
+            {% endfor %}
         </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+    </nav>
+</div>
+{% endif %}
+
+
+<div class="container">
     {% block body %}{% endblock %}
     {% block javascripts %}{% endblock %}
 

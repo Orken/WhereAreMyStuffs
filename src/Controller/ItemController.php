@@ -101,7 +101,7 @@ class ItemController extends AbstractController
         $pagination = $paginator->paginate(
                 $items,
                 $request->query->getInt('page', 1),
-                10
+                13
         );
         return $this->render('item/show.html.twig', [
                 'item' => $item,

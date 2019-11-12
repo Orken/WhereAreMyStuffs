@@ -3,6 +3,7 @@
 {% block body %}
     <h1>Inscription</h1>
     {{ form_start(form) }}
+    {#
     {{ form_row(form.email, {
         'label':'Courriel',
         'attr': {
@@ -20,7 +21,8 @@
         'attr': {
             'placeholder': 'Confirmer votre mot de passe'
         }
-    }) }}
+    }) }}#}
+    {{ form_widget(form) }}
     <button type="submit">Inscription</button>
     {{ form_end(form) }}
 {% endblock %}

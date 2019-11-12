@@ -45,7 +45,7 @@ class User implements UserInterface
     /**
      * @Assert\EqualTo(propertyPath="password", message="Doit être identique")
      */
-    private $confirm_password;
+    private $confirmpassword;
 
     public function getId(): ?int
     {
@@ -108,14 +108,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getConfirmPassword(): string
+    public function getConfirmpassword(): string
     {
-        return (string) $this->confirm_password;
+        return (string) $this->confirmpassword;
     }
 
-    public function setConfirmPassword(string $confirm_password): self
+    public function setConfirmpassword(string $confirmpassword): self
     {
-        $this->confirm_password = $confirm_password;
+        $this->confirmpassword = $confirmpassword;
 
         return $this;
     }
